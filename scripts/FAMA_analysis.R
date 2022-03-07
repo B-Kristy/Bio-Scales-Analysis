@@ -285,6 +285,7 @@ ggsave(filename=paste("nitrogen_heatmap_compartment.tiff", sep=""), plot=p_funct
 # Rhizosphere: Metadata Pairwise Correlation ----------------------------------------------
 # Remove samples that lack metadata values 
 FAMA_category_corr <- FAMA_category[-grep("Not Found", FAMA_category$pH),]
+FAMA_category_corr <- FAMA_category[-grep("Not Found", FAMA_category$`Rate (mg-N/kg/h)`),]
 
 # Corvallis Site
 FAMA_category_corr_melt <- melt(FAMA_category_corr)
@@ -300,9 +301,20 @@ FAMA_category_corr_melt$`NO3-N (mg/kg)` <- as.numeric(FAMA_category_corr_melt$`N
 FAMA_category_corr_melt$`C (%)` <- as.numeric(FAMA_category_corr_melt$`C (%)`)
 FAMA_category_corr_melt$`N (%)` <- as.numeric(FAMA_category_corr_melt$`N (%)`)
 FAMA_category_corr_melt$`MC (%)` <- as.numeric(FAMA_category_corr_melt$`MC (%)`)
+FAMA_category_corr_melt$`Rate (mg-N/kg/h)`<- as.numeric(FAMA_category_corr_melt$`Rate (mg-N/kg/h)`)
 
 FAMA_corvallis_corr_melt <- subset(FAMA_category_corr_melt, `Site Location` == "Corvallis")
+FAMA_corvallis_corr_melt <- subset(FAMA_corvallis_corr_melt, `Compartment` == "Rhizosphere")
 
+# mg-N/kg/h
+ggscatter(FAMA_corvallis_corr_melt, x = "Rate (mg-N/kg/h)", y = "value",
+          add = "reg.line", conf.int = TRUE,
+          cor.coef = TRUE, cor.method = "spearman") +
+  ylab("Normalized Gene Abundance (EFPKG)") +
+  facet_wrap(~variable, scales = "free") -> corvallis_mg_n
+
+ggsave(filename=paste("corvallis_nitrification_assay.tiff", sep=""), plot=corvallis_mg_n, 
+       width=9.5, height=8, dpi=600)
 # pH
 ggscatter(FAMA_corvallis_corr_melt, x = "pH", y = "value",
           add = "reg.line", conf.int = TRUE,
@@ -417,6 +429,17 @@ ggsave(filename=paste("corvallis_MC.tiff", sep=""), plot=corvallis_MC,
 
 # Now do Clatskanie
 FAMA_clatskanie_corr_melt <- subset(FAMA_category_corr_melt, `Site Location` == "Clatskanie")
+FAMA_clatskanie_corr_melt <- subset(FAMA_clatskanie_corr_melt, `Compartment` == "Rhizosphere")
+
+ggscatter(FAMA_clatskanie_corr_melt, x = "Rate (mg-N/kg/h)", y = "value",
+          add = "reg.line", conf.int = TRUE,
+          cor.coef = TRUE, cor.method = "spearman") +
+  ylab("Normalized Gene Abundance (EFPKG)") +
+  facet_wrap(~variable, scales = "free") -> clatskanie_mg_n
+
+ggsave(filename=paste("clatskanie_nitrification_assay.tiff", sep=""), plot=clatskanie_mg_n, 
+       width=9.5, height=8, dpi=600)
+
 
 # pH
 ggscatter(FAMA_clatskanie_corr_melt, x = "pH", y = "value",
@@ -1126,7 +1149,17 @@ FAMA_category_corr_melt$`N (%)` <- as.numeric(FAMA_category_corr_melt$`N (%)`)
 FAMA_category_corr_melt$`MC (%)` <- as.numeric(FAMA_category_corr_melt$`MC (%)`)
 
 FAMA_corvallis_corr_melt <- subset(FAMA_category_corr_melt, `Site Location` == "Corvallis")
+FAMA_corvallis_corr_melt <- subset(FAMA_corvallis_corr_melt, `Compartment` == "Soil")
 
+# mg-N/kg/h
+ggscatter(FAMA_corvallis_corr_melt, x = "Rate (mg-N/kg/h)", y = "value",
+          add = "reg.line", conf.int = TRUE,
+          cor.coef = TRUE, cor.method = "spearman") +
+  ylab("Normalized Gene Abundance (EFPKG)") +
+  facet_wrap(~variable, scales = "free") -> corvallis_mg_n
+
+ggsave(filename=paste("corvallis_nitrification_assay.tiff", sep=""), plot=corvallis_mg_n, 
+       width=9.5, height=8, dpi=600)
 # pH
 ggscatter(FAMA_corvallis_corr_melt, x = "pH", y = "value",
           add = "reg.line", conf.int = TRUE,
@@ -1241,6 +1274,16 @@ ggsave(filename=paste("corvallis_MC.tiff", sep=""), plot=corvallis_MC,
 
 # Now do Clatskanie
 FAMA_clatskanie_corr_melt <- subset(FAMA_category_corr_melt, `Site Location` == "Clatskanie")
+FAMA_clatskanie_corr_melt <- subset(FAMA_clatskanie_corr_melt, `Compartment` == "Soil")
+
+ggscatter(FAMA_clatskanie_corr_melt, x = "Rate (mg-N/kg/h)", y = "value",
+          add = "reg.line", conf.int = TRUE,
+          cor.coef = TRUE, cor.method = "spearman") +
+  ylab("Normalized Gene Abundance (EFPKG)") +
+  facet_wrap(~variable, scales = "free") -> clatskanie_mg_n
+
+ggsave(filename=paste("clatskanie_nitrification_assay.tiff", sep=""), plot=clatskanie_mg_n, 
+       width=9.5, height=8, dpi=600)
 
 # pH
 ggscatter(FAMA_clatskanie_corr_melt, x = "pH", y = "value",
